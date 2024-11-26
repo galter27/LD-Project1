@@ -25,6 +25,17 @@ pipeline {
                 }
             }
         }
+
+        stage('Configure with Ansible') {
+            steps {
+                script {
+                    // Run Ansible playbook to configure the Jenkins server
+                    // Assuming you have an inventory file in your project with EC2 public IP and private key setup
+                    sh '''
+                        ansible-playbook -i hosts.ini --private-key=${PRIVATE_KEY_PATH} playbook.yml
+                    '''
+                }
+        }
     }
 
     //     stage('Run Ansible Configuration') {
