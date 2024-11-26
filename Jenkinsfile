@@ -38,7 +38,7 @@ pipeline {
                         def elastic_ip = readFile('jenkins-elastic-ip.txt').trim()
 
                         // Write the hosts.ini file with the fetched Elastic IP and other details
-                        writeFile file: 'ansible/hosts.ini', text: """
+                        writeFile file: '../ansible/hosts.ini', text: """
 [jenkins_servers]
 ${elastic_ip} ansible_user=ubuntu ansible_ssh_private_key_file=${PRIVATE_KEY_PATH}
 """
