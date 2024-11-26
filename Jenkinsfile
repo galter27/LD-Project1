@@ -29,7 +29,20 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 dir('terraform') {
+                    script {
+                    // Run Terraform apply and retrieve the Elastic IP from Terraform output
+                    sh 'terraform init'
                     sh 'terraform apply -auto-approve'
+                    
+                    // Retrieve the Elastic IP from the terraform output
+                    def elastic_ip = sh(script: 'terraform output -raw elastic_ip', returnStdout: true).trim()
+
+                    // Write the hosts.ini file with the fetched Elastic IP
+                    writeFile file: 'ansible/hosts.ini', text: """
+                    [jenkins_servers]
+                    ${elastic_ip} ansible_user=ubuntu ansible_ssh_private_key_file=${PRIVATE_KEY_PATH}
+                    """
+                    }
                 }
             }
         }
