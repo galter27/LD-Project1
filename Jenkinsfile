@@ -52,7 +52,7 @@ ${elastic_ip} ansible_user=ubuntu ansible_ssh_private_key_file=${PRIVATE_KEY_PAT
 
         stage('Get private key for ansible') {
             steps {
-                withCredentials([file(credentialsId: 'jenkins-ansible-key', variable: 'SSH_KEY_PATH')]) {
+                withCredentials([file(credentialsId: '90c40cd3-d547-4bd7-af05-b8502aeda3df', variable: 'SSH_KEY_PATH')]) {
                     sh """
                         cp $SSH_KEY_PATH ${WORKSPACE}/ansible/jenkins-ansible-key
                         chmod 600 $WORKSPACE/ansible/jenkins-ansible-key
