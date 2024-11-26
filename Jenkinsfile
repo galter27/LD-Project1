@@ -35,6 +35,7 @@ pipeline {
                         ansible-playbook -i hosts.ini --private-key=${PRIVATE_KEY_PATH} playbook.yml
                     '''
                 }
+            }
         }
     }
 
