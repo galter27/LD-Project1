@@ -56,7 +56,7 @@ ${elastic_ip} ansible_user=ubuntu ansible_ssh_private_key_file=${PRIVATE_KEY_PAT
                         // Using the credentials for the SSH private key
                         withCredentials([file(credentialsId: '90c40cd3-d547-4bd7-af05-b8502aeda3df', variable: 'PRIVATE_KEY_PATH')]) {
                             sh '''
-                                ansible-playbook -i hosts.ini --private-key=${PRIVATE_KEY_PATH} playbook.yaml
+                                ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts.ini --private-key=${PRIVATE_KEY_PATH} playbook.yaml
                             '''
                         }
                     }
