@@ -64,5 +64,10 @@ ${elastic_ip} ansible_user=ubuntu ansible_ssh_private_key_file=${PRIVATE_KEY_PAT
             }
         }
     }
+    post {
+        failure {
+            sh 'terraform destroy -auto-approve'
+        }
+    }
 
 }
