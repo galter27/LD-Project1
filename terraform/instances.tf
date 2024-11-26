@@ -13,6 +13,17 @@ resource "aws_instance" "jenkins-server" {
   key_name      = aws_key_pair.jenkins_ansible_key.key_name
   security_groups = [aws_security_group.jenkins_sg.name]
 
+  # User Data for installing Python, Jenkins, Docker, etc.
+  user_data = <<-EOF
+              #!/bin/bash
+              # Update the system
+              sudo apt update -y
+              
+              # Install Python (Python 3) and required dependencies
+              sudo apt install python3 python3-pip -y
+              sudo apt install python3-apt -y
+              EOF
+
   root_block_device {
     volume_size = 10
     volume_type = "gp3"
