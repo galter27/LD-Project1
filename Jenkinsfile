@@ -51,7 +51,9 @@ pipeline {
 
     post {
         failure {
-            sh 'terraform destroy -auto-approve'  // Use this if you want to destroy after the pipeline completes (optional)
+            dir('terraform') {
+                sh 'terraform destroy -auto-approve'  // Use this if you want to destroy after the pipeline completes (optional)
+            }
         }
     }
 
