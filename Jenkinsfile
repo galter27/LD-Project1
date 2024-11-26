@@ -25,6 +25,7 @@ pipeline {
                 }
             }
         }
+    }
 
     //     stage('Run Ansible Configuration') {
     //         steps {
