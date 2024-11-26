@@ -76,6 +76,7 @@ ${elastic_ip} ansible_user=ubuntu ansible_ssh_private_key_file=${PRIVATE_KEY_PAT
                 sh '''
                     mkdir -p /workspace/.ansible/tmp
                     ansible --version
+                    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts.ini --private-key=jenkins-ansible-key playbook.yaml
                 '''
             }
 
