@@ -17,10 +17,10 @@ resource "aws_instance" "jenkins-server" {
   user_data = <<-EOF
               #!/bin/bash
               # Install Python 3.8 and necessary packages
-              sudo apt-get update
-              sudo apt-get install -y python3.8 python3.8-distutils
-              sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
-              sudo apt-get install -y python3-pip
+              sudo apt update
+              sudo apt install software-properties-common -y 
+              sudo add-apt-repository ppa:deadsnakes/ppa  -y
+              sudo apt install python3.8 -y
 
               EOF
 
