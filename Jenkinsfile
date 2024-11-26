@@ -50,11 +50,22 @@ ${elastic_ip} ansible_user=ubuntu ansible_ssh_private_key_file=${PRIVATE_KEY_PAT
             }
         }
 
+        stage('Get private key for ansible') {
+            steps {
+                withCredentials([file(credentialsId: 'jenkins-ansible-key', variable: 'SSH_KEY_PATH')]) {
+                    sh """
+                        cp $SSH_KEY_PATH ${WORKSPACE}/ansible/jenkins-ansible-key
+                        chmod 600 $WORKSPACE/ansible/jenkins-ansible-key
+                    """
+                }
+            }
+        }
+
         stage('Configure with Ansible') {
 
             agent {
                 docker {
-                    image 'cytopia/ansible:latest'
+                    dockerfile true
                     args '-v $WORKSPACE:/workspace -w /workspace'
                 }
             }

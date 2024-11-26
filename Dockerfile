@@ -1,13 +1,14 @@
-# Base image
-FROM ubuntu:20.04
+# Use a base image with Ansible installed
+FROM cytopia/ansible:latest
 
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    python3 python3-pip sshpass && \
-    pip3 install ansible
+# Set up the working directory
+WORKDIR /workspace
 
-# Copy the ansible directory from the repository
-COPY ansible /ansible
+RUN mkdir -p /workspace/.ansible/tmp && \
+    chmod 777 /workspace/.ansible/tmp
 
-# Set the working directory to the copied ansible directory
-WORKDIR /ansible
+# Copy the Ansible directory into the container
+COPY ansible /workspace/ansible
+
+# Default command (optional)
+CMD ["ansible-playbook", "--version"]
