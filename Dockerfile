@@ -5,7 +5,7 @@ FROM cytopia/ansible:latest
 WORKDIR /ansible
 
 RUN mkdir -p /workspace/.ansible/tmp && \
-    chmod 777 /workspace/.ansible/tmp
+    chmod -R 777 /workspace
 
 # Copy the Ansible directory into the container
 COPY ansible .
