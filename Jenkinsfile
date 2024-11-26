@@ -6,6 +6,7 @@ pipeline {
         AWS_ACCESS_KEY_ID = credentials('3fe379d5-6189-4715-8047-cb951175fbe4')
         AWS_SECRET_ACCESS_KEY = credentials('3fe379d5-6189-4715-8047-cb951175fbe4')
         AWS_REGION = 'il-central-1' // Change to your desired region
+        PRIVATE_KEY_PATH = credentials('90c40cd3-d547-4bd7-af05-b8502aeda3df')
     }
 
     stages {
