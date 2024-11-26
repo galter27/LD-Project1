@@ -26,40 +26,35 @@ pipeline {
             }
         }
 
+        stage('Terraform Apply') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform apply -auto-approve'
+                }
+            }
+        }
+
         stage('Configure with Ansible') {
             steps {
                 dir('ansible') {
                     script {
                         withCredentials([file(credentialsId: '	90c40cd3-d547-4bd7-af05-b8502aeda3df', variable: 'PRIVATE_KEY_PATH')]) {
                             sh '''
-                                ansible-playbook -i hosts.ini --private-key=${PRIVATE_KEY_PATH} playbook.yml
+                                ansible-playbook -i hosts.ini --private-key=${PRIVATE_KEY_PATH} playbook.yaml
                             '''
                         }
                     }
                 }
-
-                
             }
         }
     }
 
-    //     stage('Run Ansible Configuration') {
-    //         steps {
-    //             script {
-    //                 // Run Ansible playbook to configure EC2 instances
-    //                 sh 'ansible-playbook -i ansible/inventory ansible/jenkins_setup.yml'
-    //             }
-    //         }
-    //     }
+    post {
+        faliure {
+            sh 'terraform destroy -auto-approve'  // Use this if you want to destroy after the pipeline completes (optional)
+        }
+    }
 
-    //     stage('Cleanup') {
-    //         steps {
-    //             script {
-    //                 // Optional: clean up any resources or files (e.g., Terraform state)
-    //                 sh 'terraform state rm aws_instance.example'
-    //             }
-    //         }
-    //     }
-    // }
+    
 
 }
