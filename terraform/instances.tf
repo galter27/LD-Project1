@@ -16,12 +16,12 @@ resource "aws_instance" "jenkins-server" {
   # User Data for installing Python, Jenkins, Docker, etc.
   user_data = <<-EOF
               #!/bin/bash
-              # Update the system
-              sudo apt update -y
-              
-              # Install Python (Python 3) and required dependencies
-              sudo apt install python3 python3-pip -y
-              sudo apt install python3-apt -y
+              # Install Python 3.8 and necessary packages
+              sudo apt-get update
+              sudo apt-get install -y python3.8 python3.8-distutils
+              sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
+              sudo apt-get install -y python3-pip
+
               EOF
 
   root_block_device {
