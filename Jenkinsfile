@@ -64,10 +64,7 @@ ${elastic_ip} ansible_user=ubuntu ansible_ssh_private_key_file=${PRIVATE_KEY_PAT
         stage('Configure with Ansible') {
 
             agent {
-                docker {
-                    dockerfile true
-                    args '-v $WORKSPACE:/workspace -w /workspace'
-                }
+                dockerfile {}
             }
 
             environment {
