@@ -35,7 +35,7 @@ pipeline {
                     sh 'terraform apply -auto-approve'
                     
                     // Retrieve the Elastic IP from the terraform output
-                    def elastic_ip = sh(script: 'terraform output -raw elastic_ip', returnStdout: true).trim()
+                    def elastic_ip = sh(script: 'terraform output -raw jenkins_elastic_ip', returnStdout: true).trim()
 
                     // Write the hosts.ini file with the fetched Elastic IP
                     writeFile file: 'ansible/hosts.ini', text: """
@@ -62,13 +62,13 @@ pipeline {
         }
     }
 
-    post {
-        failure {
-            dir('terraform') {
-                sh 'terraform destroy -auto-approve'  // Use this if you want to destroy after the pipeline completes (optional)
-            }
-        }
-    }
+    // post {
+    //     failure {
+    //         dir('terraform') {
+    //             sh 'terraform destroy -auto-approve'  // Use this if you want to destroy after the pipeline completes (optional)
+    //         }
+    //     }
+    // }
 
     
 
