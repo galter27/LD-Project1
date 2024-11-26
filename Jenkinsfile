@@ -53,11 +53,22 @@ ${elastic_ip} ansible_user=ubuntu ansible_ssh_private_key_file=${PRIVATE_KEY_PAT
         stage('Configure with Ansible') {
 
             agent {
-                docker {image 'ansible/ansible'}
+                docker {
+                    image 'cytopia/ansible:latest'
+                    args '-v $WORKSPACE:/workspace -w /workspace'
+                }
+            }
+
+            environment {
+                ANSIBLE_LOCAL_TEMP = '/workspace/.ansible/tmp'
+                HOME = '/workspace'
             }
             
             steps {
-                sh 'ansible version'
+                sh '''
+                    mkdir -p /workspace/.ansible/tmp
+                    ansible --version
+                '''
             }
 
 
