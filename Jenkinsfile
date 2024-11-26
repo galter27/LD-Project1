@@ -30,18 +30,19 @@ pipeline {
             steps {
                 dir('terraform') {
                     script {
-                    // Run Terraform apply and retrieve the Elastic IP from Terraform output
-                    sh 'terraform init'
-                    sh 'terraform apply -auto-approve'
-                    
-                    // Retrieve the Elastic IP from the terraform output
-                    def elastic_ip = sh(script: 'terraform output -raw jenkins_elastic_ip', returnStdout: true).trim()
+                        // Run Terraform apply
+                        sh 'terraform apply -auto-approve'
 
-                    // Write the hosts.ini file with the fetched Elastic IP
-                    writeFile file: 'ansible/hosts.ini', text: """
-                    [jenkins_servers]
-                    ${elastic_ip} ansible_user=ubuntu ansible_ssh_private_key_file=${PRIVATE_KEY_PATH}
-                    """
+                        // Retrieve the Elastic IP from the file created by Terraform
+                        def elastic_ip = readFile('jenkins-elastic-ip.txt').trim()
+
+                        // Write the hosts.ini file with the fetched Elastic IP and other details
+                        writeFile file: 'ansible/hosts.ini', text: """
+[jenkins_servers]
+${elastic_ip} ansible_user=ubuntu ansible_ssh_private_key_file=${PRIVATE_KEY_PATH}
+"""
+                        // Optionally print Jenkins URL to the Jenkins logs
+                        echo "Jenkins is available at: http://${elastic_ip}:8080"
                     }
                 }
             }
@@ -51,7 +52,8 @@ pipeline {
             steps {
                 dir('ansible') {
                     script {
-                        withCredentials([file(credentialsId: '	90c40cd3-d547-4bd7-af05-b8502aeda3df', variable: 'PRIVATE_KEY_PATH')]) {
+                        // Using the credentials for the SSH private key
+                        withCredentials([file(credentialsId: '90c40cd3-d547-4bd7-af05-b8502aeda3df', variable: 'PRIVATE_KEY_PATH')]) {
                             sh '''
                                 ansible-playbook -i hosts.ini --private-key=${PRIVATE_KEY_PATH} playbook.yaml
                             '''
@@ -61,15 +63,5 @@ pipeline {
             }
         }
     }
-
-    // post {
-    //     failure {
-    //         dir('terraform') {
-    //             sh 'terraform destroy -auto-approve'  // Use this if you want to destroy after the pipeline completes (optional)
-    //         }
-    //     }
-    // }
-
-    
 
 }

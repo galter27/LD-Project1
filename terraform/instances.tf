@@ -33,3 +33,8 @@ resource "aws_ec2_instance_state" "check_running" {
   instance_id = aws_instance.jenkins-server.id
   state = "running"
 }
+
+resource "local_file" "elastic_ip" {
+  content  = aws_eip.jenkins-server-eip.public_ip
+  filename = "jenkins-elastic-ip.txt"
+}
