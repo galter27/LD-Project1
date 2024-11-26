@@ -30,7 +30,7 @@ pipeline {
             steps {
                 dir('ansible') {
                     script {
-                        withCredentials([file(credentialsId: '24b587d8-7de0-44f0-a619-8e9cdb4adf57', variable: 'PRIVATE_KEY_PATH')]) {
+                        withCredentials([file(credentialsId: '	90c40cd3-d547-4bd7-af05-b8502aeda3df', variable: 'PRIVATE_KEY_PATH')]) {
                             sh '''
                                 ansible-playbook -i hosts.ini --private-key=${PRIVATE_KEY_PATH} playbook.yml
                             '''
