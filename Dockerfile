@@ -3,7 +3,7 @@ FROM devture/ansible:latest
 
 # Install useradd
 RUN apk add --no-cache shadow && \
-    useradd -ms /bin/bash ubuntu && \
+    useradd -ms /bin/sh ubuntu && \
     mkdir -p /workspace && \
     chown -R ubuntu:ubuntu /workspace
 
