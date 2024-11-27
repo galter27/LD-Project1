@@ -64,7 +64,9 @@ pipeline {
         stage('Configure with Ansible') {
 
             agent {
-                dockerfile {}
+                dockerfile {
+                    args '--user ubuntu:ubuntu'
+                }
             }
 
             environment {
