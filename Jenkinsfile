@@ -90,7 +90,7 @@ pipeline {
                 sh '''
                     mkdir -p /workspace/.ansible/tmp
                     ansible --version
-                    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook --become-user=ubuntu ./hosts.ini --private-key=./jenkins-ansible-key ./playbook.yaml
+                    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook --become-user=ubuntu -i ./hosts.ini --private-key=./jenkins-ansible-key ./playbook.yaml
                 '''
             }
         }
