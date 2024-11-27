@@ -17,4 +17,4 @@ RUN mkdir -p /workspace/.ansible/tmp && \
 COPY ansible .
 
 # Default command (optional)
-ENTRYPOINT [ "/bin/sh" ] 
+CMD ["ansible-playbook", "--version"]
