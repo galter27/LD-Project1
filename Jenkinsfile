@@ -61,11 +61,23 @@ pipeline {
             }
         }
 
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build Docker image using the Dockerfile in the current repository
+                    sh """
+                        docker build -t ansible_image .
+                    """
+                }
+            }
+        }
+
         stage('Configure with Ansible') {
 
             agent {
-                dockerfile {
-                    args '--user ubuntu:ubuntu'
+                docker {
+                    image 'ansible_image'
+                    args '--user root'
                 }
             }
 
@@ -78,7 +90,7 @@ pipeline {
                 sh '''
                     mkdir -p /workspace/.ansible/tmp
                     ansible --version
-                    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ansible/hosts.ini --private-key=jenkins-ansible-key ansible/playbook.yaml
+                    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook --become-user=ubuntu -i ./hosts.in i --private-key=./jenkins-ansible-key ./playbook.yaml
                 '''
             }
         }
