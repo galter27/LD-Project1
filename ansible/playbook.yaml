@@ -7,6 +7,7 @@
 
   tasks:
     - name: Install Java (required for Jenkins)
+      become: true
       apt:
         name: openjdk-17-jre
         state: present
