@@ -1,5 +1,5 @@
 # Use a base image with Ansible installed
-FROM cytopia/ansible:latest
+FROM ansible/ubuntu14.04-ansible:stable
 
 # Set up the working directory
 WORKDIR /ansible
