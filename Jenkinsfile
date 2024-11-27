@@ -12,43 +12,43 @@ pipeline {
 
     stages {
 
-//         stage('Terraform Init') {
-//             steps {
-//                 dir('terraform') {
-//                     sh 'terraform init'
-//                 }
-//             }
-//         }
+        stage('Terraform Init') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform init'
+                }
+            }
+        }
 
-//         stage('Terraform Plan') {
-//             steps {
-//                 dir('terraform') {
-//                     sh 'terraform plan -out=tfplan'
-//                 }
-//             }
-//         }
+        stage('Terraform Plan') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform plan -out=tfplan'
+                }
+            }
+        }
 
-//         stage('Terraform Apply') {
-//             steps {
-//                 dir('terraform') {
-//                     script {
-//                         // Run Terraform apply
-//                         sh 'terraform apply -auto-approve'
+        stage('Terraform Apply') {
+            steps {
+                dir('terraform') {
+                    script {
+                        // Run Terraform apply
+                        sh 'terraform apply -auto-approve'
 
-//                         // Retrieve the Elastic IP from the file created by Terraform
-//                         def elastic_ip = readFile('jenkins-elastic-ip.txt').trim()
+                        // Retrieve the Elastic IP from the file created by Terraform
+                        def elastic_ip = readFile('jenkins-elastic-ip.txt').trim()
 
-//                         // Write the hosts.ini file with the fetched Elastic IP and other details
-//                         writeFile file: '../ansible/hosts.ini', text: """
-// [jenkins_servers]
-// ${elastic_ip} ansible_user=ubuntu ansible_ssh_private_key_file=${PRIVATE_KEY_PATH}
-// """
-//                         // Optionally print Jenkins URL to the Jenkins logs
-//                         echo "Jenkins is available at: http://${elastic_ip}:8080"
-//                     }
-//                 }
-//             }
-//         }
+                        // Write the hosts.ini file with the fetched Elastic IP and other details
+                        writeFile file: '../ansible/hosts.ini', text: """
+[jenkins_servers]
+${elastic_ip} ansible_user=ubuntu ansible_ssh_private_key_file=${PRIVATE_KEY_PATH}
+"""
+                        // Optionally print Jenkins URL to the Jenkins logs
+                        echo "Jenkins is available at: http://${elastic_ip}:8080"
+                    }
+                }
+            }
+        }
 
         stage('Get private key for ansible') {
             steps {
@@ -88,8 +88,8 @@ pipeline {
             
             steps {
                 sh '''
-                    mkdir -p /workspace/.ansible/tmp
                     ansible --version
+                    cd ansible
                     ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook --become-user=ubuntu -i ./hosts.ini --private-key=./jenkins-ansible-key ./playbook.yaml
                 '''
             }
